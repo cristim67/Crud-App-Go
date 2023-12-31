@@ -11,6 +11,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
+import "github.com/gin-contrib/cors"
+
 type Student struct {
 	ID        string    `gorm:"type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
 	FirstName string    `gorm:"type:varchar(100)" json:"firstName"`
@@ -68,21 +70,31 @@ func init() {
 
 func main() {
 	router := gin.Default()
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:5173"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	router.Use(cors.New(config))
+
 	router.POST("/students", createStudent)
 	router.GET("/students", getStudents)
 	router.DELETE("/students/:id", deleteStudent)
+	router.GET("/students/:id", getStudentByID)
 
 	router.POST("/subjects", createSubject)
 	router.GET("/subjects", getSubjects)
 	router.DELETE("/subjects/:id", deleteSubject)
+	router.GET("/subjects/:id", getSubjectByID)
 
 	router.POST("/professors", createProfessor)
 	router.GET("/professors", getProfessors)
 	router.DELETE("/professors/:id", deleteProfessor)
+	router.GET("/professors/:id", getProfessorByID)
 
 	router.POST("/registerStudentSubject", createRegisterStudentSubject)
 	router.GET("/registerStudentSubject", getRegisterStudentSubject)
 	router.DELETE("/registerStudentSubject/:id", deleteRegisterStudentSubject)
+	router.GET("/registerStudentSubject/:id", getRegisterStudentSubjectByID)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -245,4 +257,52 @@ func deleteRegisterStudentSubject(c *gin.Context) {
 	}
 
 	c.Status(http.StatusNoContent)
+}
+
+func getStudentByID(c *gin.Context) {
+	id := c.Param("id")
+
+	var student Student
+	if err := db.Where("id = ?", id).First(&student).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, student)
+}
+
+func getSubjectByID(c *gin.Context) {
+	id := c.Param("id")
+
+	var subject Subject
+	if err := db.Where("id = ?", id).First(&subject).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, subject)
+}
+
+func getProfessorByID(c *gin.Context) {
+	id := c.Param("id")
+
+	var professor Professor
+	if err := db.Where("id = ?", id).First(&professor).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, professor)
+}
+
+func getRegisterStudentSubjectByID(c *gin.Context) {
+	id := c.Param("id")
+
+	var registerStudentSubject RegisterStudentSubject
+	if err := db.Where("id = ?", id).First(&registerStudentSubject).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, registerStudentSubject)
 }
