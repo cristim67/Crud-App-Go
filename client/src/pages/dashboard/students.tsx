@@ -36,10 +36,8 @@ export const Students: React.FC = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const studentsData = await fetch("http://localhost:9123/students").then(
-          (response) => response.json(),
-        );
-        setStudents(studentsData);
+        const studentsData = await fetch("http://localhost:9123/students")
+        setStudents(await studentsData.json());
         setLoading(false);
       } catch (error) {
         console.error("Error fetching students:", error);
@@ -55,11 +53,9 @@ export const Students: React.FC = () => {
   const openModalSearch = () => setIsSearchModalOpen(true);
   const closeModalSearch = () => setIsSearchModalOpen(false);
   const handleSearchStudent = async (id: string) => {
-    const foundStudent = await fetch(`http://localhost:9123/students/${id}`).then(
-      (response) => response.json(),
-    );
-    if (foundStudent) {
-      openEditModal(foundStudent);
+    const foundStudent = await fetch(`http://localhost:9123/students/${id}`);
+    if (foundStudent.ok) {
+      openEditModal(await foundStudent.json());
     } else {
       showNotification("Student not found", "error");
     }
@@ -100,7 +96,9 @@ export const Students: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newStudent),
-      }).then((response) => response.json());
+      }).then((response) => response.json()
+      );
+      console.log(response)
       if (response) {
         showNotification("Student added successfully", "success");
         const studentsData = await fetch("http://localhost:9123/students").then(
@@ -125,8 +123,8 @@ export const Students: React.FC = () => {
         {
           method: "DELETE",
         },
-      ).then((response) => response.json());
-      if (response) {
+      );
+      if (response.ok) {
         showNotification("Student deleted successfully", "success");
         setStudents((prevStudents: StudentType[]) =>
           prevStudents.filter((student) => student.id !== studentToDeleteId)
@@ -330,9 +328,9 @@ export const Students: React.FC = () => {
                 },
                 body: JSON.stringify(editedStudent),
               },
-            ).then((response) => response.json());
+            );
             closeEditModal();
-            if (response) {
+            if (response.ok) {
               showNotification("Student updated successfully", "success");
               const studentsData = await fetch(
                 "http://localhost:9123/students",

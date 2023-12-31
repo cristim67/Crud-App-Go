@@ -1,7 +1,5 @@
-import React, {useState} from "react";
-import {
-  RegisterStudentSubjectType,
-} from "../../../models/typeApp.ts";
+import React, { useState } from "react";
+import { RegisterStudentSubjectType } from "../../../models/typeApp.ts";
 
 interface ModalAddProps {
   isOpen: boolean;
@@ -12,10 +10,10 @@ interface ModalAddProps {
 }
 
 export const ModalAdd: React.FC<ModalAddProps> = ({
-                                                    isOpen,
-                                                    onClose,
-                                                    onAddRegisterStudentSubject,
-                                                  }) => {
+  isOpen,
+  onClose,
+  onAddRegisterStudentSubject,
+}) => {
   const [formData, setFormData] = useState<RegisterStudentSubjectType>({
     id: "",
     studentId: "",
@@ -27,7 +25,7 @@ export const ModalAdd: React.FC<ModalAddProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: name === "birthDate" ? new Date(value) : value,
@@ -40,15 +38,11 @@ export const ModalAdd: React.FC<ModalAddProps> = ({
       newErrors.studentId = "Student ID not found";
     }
     if (formData.studentId != null) {
-      const response = await fetch("http://localhost:9123/students", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData.studentId),
-      });
+      const response = await fetch(
+        "http://localhost:9123/students/" + formData.studentId,
+      );
 
-      if (!response) {
+      if (!response.ok) {
         newErrors.studentId = "Student ID not found";
       }
     }
@@ -56,14 +50,10 @@ export const ModalAdd: React.FC<ModalAddProps> = ({
       newErrors.subjectId = "Subject ID not found";
     }
     if (formData.subjectId != null) {
-      const response = await fetch("http://localhost:9123/subjects", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData.subjectId),
-      });
-      if (!response) {
+      const response = await fetch(
+        "http://localhost:9123/subjects/" + formData.subjectId,
+      );
+      if (!response.ok) {
         newErrors.subjectId = "Subject ID not found";
       }
     }
@@ -101,8 +91,7 @@ export const ModalAdd: React.FC<ModalAddProps> = ({
         >
           <div className="relative p-4 w-full h-full">
             <div className="relative p-4 bg-white rounded-lg shadow sm:p-5">
-              <div
-                className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+              <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Add RegisterStudentSubject
                 </h3>

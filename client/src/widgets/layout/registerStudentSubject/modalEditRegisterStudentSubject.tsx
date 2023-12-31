@@ -1,8 +1,6 @@
-import React, {useState, useEffect} from "react";
-import {Button} from "@material-tailwind/react";
-import {
-  RegisterStudentSubjectType,
-} from "../../../models/typeApp.ts";
+import React, { useState, useEffect } from "react";
+import { Button } from "@material-tailwind/react";
+import { RegisterStudentSubjectType } from "../../../models/typeApp.ts";
 
 interface ModalEditProps {
   isOpen: boolean;
@@ -12,11 +10,11 @@ interface ModalEditProps {
 }
 
 export const ModalEdit: React.FC<ModalEditProps> = ({
-                                                      isOpen,
-                                                      onClose,
-                                                      onEdit,
-                                                      initialData,
-                                                    }) => {
+  isOpen,
+  onClose,
+  onEdit,
+  initialData,
+}) => {
   const [editedRegisterStudentSubject, setEditedRegisterStudentSubject] =
     useState<RegisterStudentSubjectType>(
       initialData || {
@@ -43,7 +41,7 @@ export const ModalEdit: React.FC<ModalEditProps> = ({
   }, [initialData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setEditedRegisterStudentSubject((prevRegisterStudentSubject) => ({
       ...prevRegisterStudentSubject,
       [name]: value,
@@ -65,14 +63,11 @@ export const ModalEdit: React.FC<ModalEditProps> = ({
       newErrors.studentId = "Student ID not found";
     }
     if (editedRegisterStudentSubject.studentId != null) {
-      const response = await fetch("http://localhost:9123/students", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editedRegisterStudentSubject.studentId),
-      })
-      if (!response) {
+      const response = await fetch(
+        "http://localhost:9123/students/" +
+          editedRegisterStudentSubject.studentId,
+      );
+      if (!response.ok) {
         newErrors.studentId = "Student ID not found";
       }
     }
@@ -80,14 +75,11 @@ export const ModalEdit: React.FC<ModalEditProps> = ({
       newErrors.subjectId = "Subject ID not found";
     }
     if (editedRegisterStudentSubject.subjectId != null) {
-      const response = await fetch("http://localhost:9123/subjects", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editedRegisterStudentSubject.subjectId),
-      });
-      if (!response) {
+      const response = await fetch(
+        "http://localhost:9123/subjects/" +
+          editedRegisterStudentSubject.subjectId,
+      );
+      if (!response.ok) {
         newErrors.subjectId = "Subject ID not found";
       }
     }
@@ -117,8 +109,7 @@ export const ModalEdit: React.FC<ModalEditProps> = ({
         >
           <div className="relative p-4 w-full h-full">
             <div className="relative p-4 bg-white rounded-lg shadow sm:p-5">
-              <div
-                className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+              <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Edit RegisterStudentSubject
                 </h3>
@@ -198,10 +189,10 @@ export const ModalEdit: React.FC<ModalEditProps> = ({
                       value={
                         editedRegisterStudentSubject.dateRegistered
                           ? new Date(
-                            editedRegisterStudentSubject.dateRegistered,
-                          )
-                            .toISOString()
-                            .split("T")[0]
+                              editedRegisterStudentSubject.dateRegistered,
+                            )
+                              .toISOString()
+                              .split("T")[0]
                           : ""
                       }
                       onChange={handleInputChange}

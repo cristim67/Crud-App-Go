@@ -38,10 +38,8 @@ export const Subjects: React.FC = () => {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const subjectsData = await fetch("http://localhost:9123/subjects").then(
-          (response) => response.json(),
-        );
-        setSubjects(subjectsData);
+        const subjectsData = await fetch("http://localhost:9123/subjects")
+        setSubjects(await subjectsData.json());
         setLoading(false);
       } catch (error) {
         console.error("Error fetching subjects:", error);
@@ -59,10 +57,9 @@ export const Subjects: React.FC = () => {
   const handleSearchSubject = async (id: string) => {
     const foundSubject = await fetch(
       `http://localhost:9123/subjects/${id}`,
-    ).then((response) => response.json()
     )
-    if (foundSubject) {
-      openEditModal(foundSubject);
+    if (foundSubject.ok) {
+      openEditModal(await foundSubject.json());
     } else {
       showNotification("Subject not found", "error");
     }
@@ -107,12 +104,10 @@ export const Subjects: React.FC = () => {
         },
         body: JSON.stringify(newSubject),
       });
-      if (response) {
+      if (response.ok) {
         showNotification("Subject added successfully", "success");
-        const subjectsData = await fetch("http://localhost:9123/subjects").then(
-          (response) => response.json(),
-        );
-        setSubjects(subjectsData);
+        const subjectsData = await fetch("http://localhost:9123/subjects")
+        setSubjects(await subjectsData.json());
       } else {
         showNotification("Failed to add subject", "error");
       }
@@ -132,7 +127,7 @@ export const Subjects: React.FC = () => {
           method: "DELETE",
         },
       );
-      if (response) {
+      if (response.ok) {
         showNotification("Subject deleted successfully", "success");
         setSubjects((prevSubjects: SubjectType[]) =>
           prevSubjects.filter((subject) => subject.id !== subjectToDeleteId),
@@ -275,7 +270,6 @@ export const Subjects: React.FC = () => {
         </CardBody>
       </Card>
 
-      {/* Modals go here */}
       <ModalAdd
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -319,12 +313,12 @@ export const Subjects: React.FC = () => {
               },
             );
             closeEditModal();
-            if (response) {
+            if (response.ok) {
               showNotification("Subject updated successfully", "success");
               const subjectsData = await fetch(
                 "http://localhost:9123/subjects",
-              ).then((response) => response.json());
-              setSubjects(subjectsData);
+              );
+              setSubjects(await subjectsData.json());
             } else {
               showNotification("Failed to update subject", "error");
             }

@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
   CardBody,
   Typography,
 } from "@material-tailwind/react";
-import {RegisterStudentSubjectType} from "../../models/typeApp.ts";
-import {ModalAdd} from "../../widgets/layout/registerStudentSubject/modalAddRegisterStudentSubject.tsx";
-import {ModalDelete} from "../../widgets/layout/registerStudentSubject/modalDeleteRegisterStudentSubject.tsx";
-import {ModalEdit} from "../../widgets/layout/registerStudentSubject/modalEditRegisterStudentSubject.tsx";
-import {ModalSearch} from "../../widgets/layout/registerStudentSubject/modalSearchRegisterStudentSubject.tsx";
-import {Notification} from "../../widgets/layout/notifications.tsx";
+import { RegisterStudentSubjectType } from "../../models/typeApp.ts";
+import { ModalAdd } from "../../widgets/layout/registerStudentSubject/modalAddRegisterStudentSubject.tsx";
+import { ModalDelete } from "../../widgets/layout/registerStudentSubject/modalDeleteRegisterStudentSubject.tsx";
+import { ModalEdit } from "../../widgets/layout/registerStudentSubject/modalEditRegisterStudentSubject.tsx";
+import { ModalSearch } from "../../widgets/layout/registerStudentSubject/modalSearchRegisterStudentSubject.tsx";
+import { Notification } from "../../widgets/layout/notifications.tsx";
 
 interface NotificationState {
   message: string;
@@ -42,11 +42,10 @@ export const RegisterStudentSubjects: React.FC = () => {
   useEffect(() => {
     const fetchRegisterStudentSubjects = async () => {
       try {
-        const RegisterStudentSubjectsData =
-          await fetch("http://localhost:9123/registerStudentSubjects").then(
-            (response) => response.json(),
-          );
-        setRegisterStudentSubjects(RegisterStudentSubjectsData);
+        const RegisterStudentSubjectsData = await fetch(
+          "http://localhost:9123/registerStudentSubjects",
+        );
+        setRegisterStudentSubjects(await RegisterStudentSubjectsData.json());
         setLoading(false);
       } catch (error) {
         console.error("Error fetching RegisterStudentSubjects:", error);
@@ -62,12 +61,11 @@ export const RegisterStudentSubjects: React.FC = () => {
   const openModalSearch = () => setIsSearchModalOpen(true);
   const closeModalSearch = () => setIsSearchModalOpen(false);
   const handleSearchRegisterStudentSubject = async (id: string) => {
-    const foundRegisterStudentSubject =
-      await fetch(`http://localhost:9123/registerStudentSubjects/${id}`).then(
-        (response) => response.json(),
-      );
-    if (foundRegisterStudentSubject) {
-      openEditModal(foundRegisterStudentSubject);
+    const foundRegisterStudentSubject = await fetch(
+      `http://localhost:9123/registerStudentSubjects/${id}`,
+    );
+    if (foundRegisterStudentSubject.ok) {
+      openEditModal(await foundRegisterStudentSubject.json());
     } else {
       showNotification("RegisterStudentSubject not found", "error");
     }
@@ -110,23 +108,25 @@ export const RegisterStudentSubjects: React.FC = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:9123/registerStudentSubjects", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "http://localhost:9123/registerStudentSubjects",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newRegisterStudentSubject),
         },
-        body: JSON.stringify(newRegisterStudentSubject),
-      }).then((response) => response.json());
-      if (response) {
+      );
+      if (response.ok) {
         showNotification(
           "RegisterStudentSubject added successfully",
           "success",
         );
-        const RegisterStudentSubjectsData =
-          await fetch("http://localhost:9123/registerStudentSubjects").then(
-            (response) => response.json(),
-          );
-        setRegisterStudentSubjects(RegisterStudentSubjectsData);
+        const RegisterStudentSubjectsData = await fetch(
+          "http://localhost:9123/registerStudentSubjects",
+        );
+        setRegisterStudentSubjects(await RegisterStudentSubjectsData.json());
       } else {
         showNotification("Failed to add RegisterStudentSubject", "error");
       }
@@ -145,8 +145,8 @@ export const RegisterStudentSubjects: React.FC = () => {
         {
           method: "DELETE",
         },
-      ).then((response) => response.json());
-      if (response) {
+      );
+      if (response.ok) {
         showNotification(
           "RegisterStudentSubject deleted successfully",
           "success",
@@ -169,9 +169,9 @@ export const RegisterStudentSubjects: React.FC = () => {
   };
 
   const showNotification = (message: string, type: "success" | "error") => {
-    setNotification({message, type, isVisible: true});
+    setNotification({ message, type, isVisible: true });
     setTimeout(() => {
-      setNotification((prevState) => ({...prevState, isVisible: false}));
+      setNotification((prevState) => ({ ...prevState, isVisible: false }));
     }, 5000);
   };
 
@@ -181,7 +181,7 @@ export const RegisterStudentSubjects: React.FC = () => {
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
-      <Notification message={notification.message} type={notification.type}/>
+      <Notification message={notification.message} type={notification.type} />
       <Card placeholder>
         <CardHeader
           variant="gradient"
@@ -221,86 +221,85 @@ export const RegisterStudentSubjects: React.FC = () => {
         >
           <table className="w-full min-w-[640px] table-auto">
             <thead>
-            <tr>
-              <th className="py-3 px-5 border-b border-blue-gray-50">ID</th>
-              <th className="py-3 px-5 border-b border-blue-gray-50">
-                Student ID
-              </th>
-              <th className="py-3 px-5 border-b border-blue-gray-50">
-                Subject ID
-              </th>
-              <th className="py-3 px-5 border-b border-blue-gray-50">
-                Grade
-              </th>
-              <th className="py-3 px-5 border-b border-blue-gray-50">
-                Date Registered
-              </th>
-              <th className="py-3 px-5 border-b border-blue-gray-50">
-                Created At
-              </th>
-              <th className="py-3 px-5 border-b border-blue-gray-50">Edit</th>
-              <th className="py-3 px-5 border-b border-blue-gray-50">
-                Delete
-              </th>
-            </tr>
+              <tr>
+                <th className="py-3 px-5 border-b border-blue-gray-50">ID</th>
+                <th className="py-3 px-5 border-b border-blue-gray-50">
+                  Student ID
+                </th>
+                <th className="py-3 px-5 border-b border-blue-gray-50">
+                  Subject ID
+                </th>
+                <th className="py-3 px-5 border-b border-blue-gray-50">
+                  Grade
+                </th>
+                <th className="py-3 px-5 border-b border-blue-gray-50">
+                  Date Registered
+                </th>
+                <th className="py-3 px-5 border-b border-blue-gray-50">
+                  Created At
+                </th>
+                <th className="py-3 px-5 border-b border-blue-gray-50">Edit</th>
+                <th className="py-3 px-5 border-b border-blue-gray-50">
+                  Delete
+                </th>
+              </tr>
             </thead>
             <tbody>
-            {RegisterStudentSubjects.map(
-              ({
-                 id,
-                 subjectId,
-                 studentId,
-                 grade,
-                 dateRegistered,
-                 createdAt,
-               }) => {
-                const className = "py-3 px-5 border-b border-blue-gray-50";
+              {RegisterStudentSubjects.map(
+                ({
+                  id,
+                  subjectId,
+                  studentId,
+                  grade,
+                  dateRegistered,
+                  createdAt,
+                }) => {
+                  const className = "py-3 px-5 border-b border-blue-gray-50";
 
-                return (
-                  <tr key={id}>
-                    <td className={className}>{id}</td>
-                    <td className={className}>{studentId}</td>
-                    <td className={className}>{subjectId}</td>
-                    <td className={className}>{grade}</td>
-                    <td className={className}>
-                      {dateRegistered?.toString()}
-                    </td>
-                    <td className={className}>{createdAt?.toString()}</td>
-                    <td className={className}>
-                      <button
-                        onClick={() =>
-                          openEditModal({
-                            id,
-                            subjectId,
-                            studentId,
-                            grade,
-                            dateRegistered,
-                            createdAt,
-                          })
-                        }
-                        className="text-blue-500 hover:text-blue-700 focus:outline-none"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                    <td className={className}>
-                      <button
-                        onClick={() => openDeleteModal(id)}
-                        className="text-red-500 hover:text-red-700 focus:outline-none"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                );
-              },
-            )}
+                  return (
+                    <tr key={id}>
+                      <td className={className}>{id}</td>
+                      <td className={className}>{studentId}</td>
+                      <td className={className}>{subjectId}</td>
+                      <td className={className}>{grade}</td>
+                      <td className={className}>
+                        {dateRegistered?.toString()}
+                      </td>
+                      <td className={className}>{createdAt?.toString()}</td>
+                      <td className={className}>
+                        <button
+                          onClick={() =>
+                            openEditModal({
+                              id,
+                              subjectId,
+                              studentId,
+                              grade,
+                              dateRegistered,
+                              createdAt,
+                            })
+                          }
+                          className="text-blue-500 hover:text-blue-700 focus:outline-none"
+                        >
+                          Edit
+                        </button>
+                      </td>
+                      <td className={className}>
+                        <button
+                          onClick={() => openDeleteModal(id)}
+                          className="text-red-500 hover:text-red-700 focus:outline-none"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                },
+              )}
             </tbody>
           </table>
         </CardBody>
       </Card>
 
-      {/* Modals go here */}
       <ModalAdd
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -345,18 +344,19 @@ export const RegisterStudentSubjects: React.FC = () => {
                 },
                 body: JSON.stringify(editedRegisterStudentSubject),
               },
-            ).then((response) => response.json());
+            );
             closeEditModal();
-            if (response) {
+            if (response.ok) {
               showNotification(
                 "RegisterStudentSubject updated successfully",
                 "success",
               );
-              const RegisterStudentSubjectsData =
-                await fetch("http://localhost:9123/registerStudentSubjects").then(
-                  (response) => response.json(),
-                );
-              setRegisterStudentSubjects(RegisterStudentSubjectsData);
+              const RegisterStudentSubjectsData = await fetch(
+                "http://localhost:9123/registerStudentSubjects",
+              );
+              setRegisterStudentSubjects(
+                await RegisterStudentSubjectsData.json(),
+              );
             } else {
               showNotification(
                 "Failed to update RegisterStudentSubject",

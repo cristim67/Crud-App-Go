@@ -45,9 +45,8 @@ export const Professors: React.FC = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }).then((response) => response.json()
-        );
-        setprofessors(professorsData);
+        })
+        setprofessors(await professorsData.json());
         setLoading(false);
       } catch (error) {
         console.error("Error fetching professors:", error);
@@ -71,9 +70,9 @@ export const Professors: React.FC = () => {
           "Content-Type": "application/json",
         },
       },
-    ).then((response) => response.json());
-    if (foundprofessor) {
-      openEditModal(foundprofessor);
+    );
+    if (foundprofessor.ok) {
+      openEditModal(await foundprofessor.json());
     } else {
       showNotification("Professor not found", "error");
     }
@@ -119,15 +118,15 @@ export const Professors: React.FC = () => {
         body: JSON.stringify(newprofessor),
       });
 
-      if (response) {
+      if (response.ok) {
         showNotification("professor added successfully", "success");
         const professorsData = await fetch("http://localhost:9123/professors", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-        }).then((response) => response.json());
-        setprofessors(professorsData);
+        });
+        setprofessors(await professorsData.json());
       } else {
         showNotification("Failed to add professor", "error");
       }
@@ -147,11 +146,11 @@ export const Professors: React.FC = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }).then((response) => response.json());
-      if (response) {
-        showNotification("professor deleted successfully", "success");
-        setprofessors((prevprofessors: ProfessorType[]) =>
-          prevprofessors.filter(
+        });
+      if (response.ok) {
+        showNotification("Professor deleted successfully", "success");
+        setprofessors((prevProfessors: ProfessorType[]) =>
+          prevProfessors.filter(
             (professor) => professor.id !== professorToDeleteId,
           ),
         );
@@ -283,7 +282,6 @@ export const Professors: React.FC = () => {
         </CardBody>
       </Card>
 
-      {/* Modals go here */}
       <ModalAdd
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -325,9 +323,9 @@ export const Professors: React.FC = () => {
                 },
                 body: JSON.stringify(editedprofessor),
               },
-            ).then((response) => response.json());
+            );
             closeEditModal();
-            if (response) {
+            if (response.ok) {
               showNotification("professor updated successfully", "success");
               const professorsData = await fetch(
                 "http://localhost:9123/professors",
@@ -337,8 +335,8 @@ export const Professors: React.FC = () => {
                     "Content-Type": "application/json",
                   },
                 },
-              ).then((response) => response.json());
-              setprofessors(professorsData);
+              );
+              setprofessors(await professorsData.json());
             } else {
               showNotification("Failed to update professor", "error");
             }
