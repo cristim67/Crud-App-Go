@@ -14,39 +14,55 @@ import (
 import "github.com/gin-contrib/cors"
 
 type Student struct {
-	ID        string    `gorm:"type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
-	FirstName string    `gorm:"type:varchar(255)" json:"firstName"`
-	LastName  string    `gorm:"type:varchar(255)" json:"lastName"`
-	BirthDate time.Time `json:"birthDate"`
-	Address   string    `gorm:"type:varchar(255)" json:"address"`
-	Email     string    `gorm:"type:varchar(255)" json:"email"`
-	Phone     string    `gorm:"type:varchar(20)" json:"phone"`
-	CreatedAt time.Time `json:"createdAt"`
+	ID        string    `gorm:"column:id;type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
+	FirstName string    `gorm:"column:firstName;type:varchar(255)" json:"firstName"`
+	LastName  string    `gorm:"column:lastName;type:varchar(255)" json:"lastName"`
+	BirthDate time.Time `gorm:"column:birthDate" json:"birthDate"`
+	Address   string    `gorm:"column:address;type:varchar(255)" json:"address"`
+	Email     string    `gorm:"column:email;type:varchar(255)" json:"email"`
+	Phone     string    `gorm:"column:phone;type:varchar(20)" json:"phone"`
+	CreatedAt time.Time `gorm:"column:createdAt" json:"createdAt"`
 }
 
 type Subject struct {
-	ID                 string    `gorm:"type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
-	SubjectName        string    `gorm:"type:varchar(255)" json:"subjectName"`
-	SubjectDescription string    `gorm:"type:varchar(255)" json:"subjectDescription"`
-	ProfessorID        string    `gorm:"type:uuid" json:"professorId"`
-	CreatedAt          time.Time `json:"createdAt"`
+	ID                 string    `gorm:"column:id;type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
+	SubjectName        string    `gorm:"column:subjectName;type:varchar(255)" json:"subjectName"`
+	SubjectDescription string    `gorm:"column:subjectDescription;type:varchar(255)" json:"subjectDescription"`
+	ProfessorID        string    `gorm:"column:professorId;type:uuid" json:"professorId"`
+	CreatedAt          time.Time `gorm:"column:createdAt" json:"createdAt"`
 }
 
 type Professor struct {
-	ID        string    `gorm:"type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
-	FirstName string    `gorm:"type:varchar(255)" json:"firstName"`
-	LastName  string    `gorm:"type:varchar(255)" json:"lastName"`
-	Email     string    `gorm:"type:varchar(255)" json:"email"`
-	CreatedAt time.Time `json:"createdAt"`
+	ID        string    `gorm:"column:id;type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
+	FirstName string    `gorm:"column:firstName;type:varchar(255)" json:"firstName"`
+	LastName  string    `gorm:"column:lastName;type:varchar(255)" json:"lastName"`
+	Email     string    `gorm:"column:email;type:varchar(255)" json:"email"`
+	CreatedAt time.Time `gorm:"column:createdAt" json:"createdAt"`
 }
 
 type RegisterStudentSubject struct {
-	ID             string    `gorm:"type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
-	StudentID      string    `gorm:"type:uuid" json:"studentId"`
-	SubjectID      string    `gorm:"type:uuid" json:"subjectId"`
-	Grade          int       `json:"grade"`
-	DateRegistered time.Time `json:"dateRegistered"`
-	CreatedAt      time.Time `json:"createdAt"`
+	ID             string    `gorm:"column:id;type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
+	StudentID      string    `gorm:"column:studentId;type:uuid" json:"studentId"`
+	SubjectID      string    `gorm:"column:subjectId;type:uuid" json:"subjectId"`
+	Grade          int       `gorm:"column:grade" json:"grade"`
+	DateRegistered time.Time `gorm:"column:dateRegistered" json:"dateRegistered"`
+	CreatedAt      time.Time `gorm:"column:createdAt" json:"createdAt"`
+}
+
+func (RegisterStudentSubject) TableName() string {
+	return "registerStudentSubject"
+}
+
+func (Student) TableName() string {
+	return "students"
+}
+
+func (Subject) TableName() string {
+	return "subjects"
+}
+
+func (Professor) TableName() string {
+	return "professors"
 }
 
 var db *gorm.DB
@@ -72,7 +88,7 @@ func main() {
 	router := gin.Default()
 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173"}
+	config.AllowOrigins = []string{"http://localhost:5174"}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
 	router.Use(cors.New(config))
 
