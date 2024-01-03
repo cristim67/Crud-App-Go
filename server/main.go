@@ -94,24 +94,28 @@ func main() {
 
 	router.POST("/students", createStudent)
 	router.GET("/students", getStudents)
+
 	router.DELETE("/students/:id", deleteStudent)
 	router.GET("/students/:id", getStudentByID)
 	router.PUT("/students/:id", updateStudent)
 
 	router.POST("/subjects", createSubject)
 	router.GET("/subjects", getSubjects)
+
 	router.DELETE("/subjects/:id", deleteSubject)
 	router.GET("/subjects/:id", getSubjectByID)
 	router.PUT("/subjects/:id", updateSubject)
 
 	router.POST("/professors", createProfessor)
 	router.GET("/professors", getProfessors)
+
 	router.DELETE("/professors/:id", deleteProfessor)
 	router.GET("/professors/:id", getProfessorByID)
 	router.PUT("/professors/:id", updateProfessor)
 
 	router.POST("/registerStudentSubjects", createRegisterStudentSubject)
 	router.GET("/registerStudentSubjects", getRegisterStudentSubject)
+
 	router.DELETE("/registerStudentSubjects/:id", deleteRegisterStudentSubject)
 	router.GET("/registerStudentSubjects/:id", getRegisterStudentSubjectByID)
 	router.PUT("/registerStudentSubjects/:id", updateRegisterStudentSubject)
