@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   Card,
-  CardHeader,
   CardBody,
+  CardHeader,
   Typography,
 } from "@material-tailwind/react";
 import { ProfessorType } from "../../models/typeApp.ts";
@@ -40,12 +40,12 @@ export const Professors: React.FC = () => {
   useEffect(() => {
     const fetchprofessors = async () => {
       try {
-        const professorsData = await fetch("http://localhost:9123/professors",{
+        const professorsData = await fetch("http://localhost:9123/professors", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-        })
+        });
         setprofessors(await professorsData.json());
         setLoading(false);
       } catch (error) {
@@ -140,13 +140,15 @@ export const Professors: React.FC = () => {
     if (!professorToDeleteId) return;
 
     try {
-      const response =
-        await fetch(`http://localhost:9123/professors/${professorToDeleteId}`, {
+      const response = await fetch(
+        `http://localhost:9123/professors/${professorToDeleteId}`,
+        {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-        });
+        },
+      );
       if (response.ok) {
         showNotification("Professor deleted successfully", "success");
         setprofessors((prevProfessors: ProfessorType[]) =>
@@ -186,25 +188,25 @@ export const Professors: React.FC = () => {
           placeholder
         >
           <Typography
-              variant="h6"
-              color="white"
-              placeholder="true"
-              className="mx-auto"
+            variant="h6"
+            color="white"
+            placeholder="true"
+            className="mx-auto"
           >
             <div className="hidden md:block">Professor</div>
             <div className="flex justify-end md:mr-3 mt-0 md:mt-[-2rem] ">
               <button
-                  onClick={openModalSearch}
-                  className="mr-2 block text-black bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                  type="button"
+                onClick={openModalSearch}
+                className="mr-2 block text-black bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                type="button"
               >
                 Search professor
               </button>
 
               <button
-                  onClick={openModal}
-                  className="block text-black bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                  type="button"
+                onClick={openModal}
+                className="block text-black bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                type="button"
               >
                 Add professor
               </button>
@@ -212,8 +214,8 @@ export const Professors: React.FC = () => {
           </Typography>
         </CardHeader>
         <CardBody
-            className="overflow-x-scroll px-0 pt-0 pb-2"
-            placeholder="true"
+          className="overflow-x-scroll px-0 pt-0 pb-2"
+          placeholder="true"
         >
           <table className="w-full min-w-[640px] table-auto">
             <thead>

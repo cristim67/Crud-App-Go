@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {ProfessorType} from"../../../models/typeApp.ts";
+import { ProfessorType } from "../../../models/typeApp.ts";
 
 interface ModalAddProps {
   isOpen: boolean;

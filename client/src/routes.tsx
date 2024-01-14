@@ -1,6 +1,8 @@
-import { AcademicCapIcon } from "@heroicons/react/24/solid";
-import { UsersIcon } from "@heroicons/react/24/solid";
-import { BookOpenIcon } from "@heroicons/react/24/solid";
+import {
+  AcademicCapIcon,
+  BookOpenIcon,
+  UsersIcon,
+} from "@heroicons/react/24/solid";
 import { Students } from "./pages/dashboard/students.tsx";
 import { Subjects } from "./pages/dashboard/subjects.tsx";
 import { Professors } from "./pages/dashboard/professors.tsx";

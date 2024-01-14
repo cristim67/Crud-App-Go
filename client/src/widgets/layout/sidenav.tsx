@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Link, NavLink } from "react-router-dom";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Button, IconButton, Typography } from "@material-tailwind/react";
-import { useMaterialTailwindController, setOpenSidenav } from "../../context";
+import { setOpenSidenav, useMaterialTailwindController } from "../../context";
 
 interface SidenavProps {
   img?: string;
