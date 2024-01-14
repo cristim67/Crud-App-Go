@@ -190,36 +190,36 @@ export const RegisterStudentSubjects: React.FC = () => {
           placeholder
         >
           <Typography
-            variant="h6"
-            color="white"
-            placeholder="true"
-            className="mx-auto"
+              variant="h6"
+              color="white"
+              placeholder="true"
+              className="mx-auto"
           >
-            RegisterStudentSubjects
-            <div className="flex justify-end mr-3 mt-[-2rem]">
+            <div className="hidden md:block">RegisterStudentSubject</div>
+            <div className="flex justify-end md:mr-3 mt-0 md:mt-[-2rem] ">
               <button
-                onClick={openModalSearch}
-                className="mr-2 block text-black bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                type="button"
+                  onClick={openModalSearch}
+                  className="mr-2 block text-black bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  type="button"
               >
-                Search RegisterStudentSubject
+                Search RegisterRelation
               </button>
 
               <button
-                onClick={openModal}
-                className="block text-black bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                type="button"
+                  onClick={openModal}
+                  className="block text-black bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  type="button"
               >
-                Add RegisterStudentSubject
+                Add RegisterRelation
               </button>
             </div>
           </Typography>
         </CardHeader>
         <CardBody
-          className="overflow-x-scroll px-0 pt-0 pb-2"
-          placeholder="true"
+            className="overflow-x-scroll px-0 pt-0 pb-2"
+            placeholder="true"
         >
-          <table className="w-full min-w-[640px] table-auto">
+        <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
                 <th className="py-3 px-5 border-b border-blue-gray-50">ID</th>
@@ -263,7 +263,7 @@ export const RegisterStudentSubjects: React.FC = () => {
                       <td className={className}>{subjectId}</td>
                       <td className={className}>{grade}</td>
                       <td className={className}>
-                        {dateRegistered?.toString()}
+                        {new Date(dateRegistered!).toISOString().split("T")[0]}
                       </td>
                       <td className={className}>{createdAt?.toString()}</td>
                       <td className={className}>

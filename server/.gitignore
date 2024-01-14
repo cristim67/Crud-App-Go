@@ -26,10 +26,6 @@ out/
 # Ignore vendor directories
 vendor/
 
-# Ignore go mod and go sum files
-go.mod
-go.sum
-
 # Ignore the build directory
 build/
 .idea/

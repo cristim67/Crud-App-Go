@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +13,7 @@ import (
 )
 
 import "github.com/gin-contrib/cors"
+import _ "github.com/joho/godotenv"
 
 type Student struct {
 	ID        string    `gorm:"column:id;type:uuid;primary_key;default:uuid_generate_v4()" json:"id"`
@@ -30,6 +32,7 @@ type Subject struct {
 	SubjectDescription string    `gorm:"column:subjectDescription;type:varchar(255)" json:"subjectDescription"`
 	ProfessorID        string    `gorm:"column:professorId;type:uuid" json:"professorId"`
 	CreatedAt          time.Time `gorm:"column:createdAt" json:"createdAt"`
+	Professor          Professor `gorm:"foreignkey:ProfessorID"`
 }
 
 type Professor struct {
@@ -47,6 +50,8 @@ type RegisterStudentSubject struct {
 	Grade          int       `gorm:"column:grade" json:"grade"`
 	DateRegistered time.Time `gorm:"column:dateRegistered" json:"dateRegistered"`
 	CreatedAt      time.Time `gorm:"column:createdAt" json:"createdAt"`
+	Student        Student   `gorm:"foreignkey:StudentID"`
+	Subject        Subject   `gorm:"foreignkey:SubjectID"`
 }
 
 func (RegisterStudentSubject) TableName() string {
@@ -68,6 +73,10 @@ func (Professor) TableName() string {
 var db *gorm.DB
 
 func init() {
+	errEnv := godotenv.Load()
+	if errEnv != nil {
+		log.Fatal("Error loading .env file")
+	}
 	var err error
 	dbURL := os.Getenv("POSTGRESQL_URL")
 	if dbURL == "" {
@@ -82,6 +91,9 @@ func init() {
 		log.Fatal(err)
 	}
 	db.AutoMigrate(&Student{}, &Subject{}, &Professor{}, &RegisterStudentSubject{})
+	db.Model(&RegisterStudentSubject{}).AddForeignKey("studentId", "students(id)", "CASCADE", "CASCADE")
+	db.Model(&RegisterStudentSubject{}).AddForeignKey("subjectId", "subjects(id)", "CASCADE", "CASCADE")
+	db.Model(&Subject{}).AddForeignKey("professorId", "professors(id)", "CASCADE", "CASCADE")
 }
 
 func main() {

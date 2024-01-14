@@ -28,7 +28,7 @@ export const ModalAdd: React.FC<ModalAddProps> = ({
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === "birthDate" ? new Date(value) : value,
+      [name]: name === "dateRegistered" ? new Date(value) : value,
     }));
   };
   const validateForm = async () => {
