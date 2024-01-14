@@ -45,6 +45,8 @@ export const ModalEdit: React.FC<ModalEditProps> = ({
     setEditedRegisterStudentSubject((prevRegisterStudentSubject) => ({
       ...prevRegisterStudentSubject,
       [name]: value,
+      [name]: name === "grade" ? parseInt(value) : value,
+      [name]: name === "dateRegistered" ? new Date(value) : value,
     }));
   };
 

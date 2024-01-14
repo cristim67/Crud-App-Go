@@ -49,6 +49,7 @@ export const ModalEdit: React.FC<ModalEditProps> = ({
     setEditedStudent((prevStudent) => ({
       ...prevStudent,
       [name]: value,
+      [name]: name === "birthDate" ? new Date(value) : value,
     }));
   };
 
