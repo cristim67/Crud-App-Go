@@ -98,6 +98,7 @@ func init() {
 
 func main() {
 	router := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
 
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:5173"}
